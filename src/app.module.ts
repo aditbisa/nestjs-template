@@ -3,8 +3,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { MariadbConfigModule, MariadbConfigService } from './configs/mariadb';
-import { HealthModule } from './controllers/health';
+import { MariadbConfigModule, MariadbConfigService } from '@configs/mariadb';
+import { HealthModule } from '@controllers/health';
 
 @Module({
   imports: [
