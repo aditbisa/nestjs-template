@@ -23,7 +23,7 @@ describe('MariadbConfigModule', () => {
   it('should return value', async () => {
     // Default values
     expect(mariadbConfig.host).toBe('127.0.0.1');
-    expect(mariadbConfig.port).toBe(5432);
+    expect(mariadbConfig.port).toBe(3306);
 
     // Modified values
     expect(mariadbConfig.user).toBe('userdb');
