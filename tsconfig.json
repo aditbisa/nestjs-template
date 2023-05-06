@@ -16,6 +16,18 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@commons/*": ["src/commons/*"],
+      "@decorators/*": ["src/commons/decorators/*"],
+      "@exceptions/*": ["src/commons/exceptions/*"],
+      "@filters/*": ["src/commons/filters/*"],
+      "@helpers/*": ["src/commons/helpers/*"],
+      "@configs/*": ["src/configs/*"],
+      "@controllers/*": ["src/controllers/*"],
+      "@models/*": ["src/models/*"],
+      "@schemas/*": ["src/schemas/*"],
+      "@src/*": ["src/*"]
+    }
   }
 }
