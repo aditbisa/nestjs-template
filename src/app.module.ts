@@ -9,6 +9,7 @@ import { MariadbConfigModule, MariadbConfigService } from './configs/mariadb';
   imports: [
     TypeOrmModule.forRootAsync({
       imports: [MariadbConfigModule],
+      inject: [MariadbConfigService],
       useFactory: (config: MariadbConfigService) => ({
         type: 'mariadb',
         connectorPackage: 'mysql2',
