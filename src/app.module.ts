@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MariadbConfigModule, MariadbConfigService } from './configs/mariadb';
+import { HealthModule } from './controllers/health';
 
 @Module({
   imports: [
@@ -22,8 +23,8 @@ import { MariadbConfigModule, MariadbConfigService } from './configs/mariadb';
         synchronize: true, // remove on prod and use migration
         timezone: '+07:00', // Jakarta
       }),
-      inject: [MariadbConfigService],
     }),
+    HealthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
