@@ -18,6 +18,7 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
+      "@test/*": ["test/*"],
       "@commons/*": ["src/commons/*"],
       "@decorators/*": ["src/commons/decorators/*"],
       "@exceptions/*": ["src/commons/exceptions/*"],
