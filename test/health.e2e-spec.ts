@@ -1,26 +1,23 @@
 import * as request from 'supertest';
 import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { ConfigOptions, TypeOrmAsyncOptions } from '@test/configs.spec';
-import { HealthModule } from './health.module';
+import { AppModule } from '@src/app.module';
 
-describe('HealthModule (e2e)', () => {
+describe('HealthController (e2e)', () => {
   let app: INestApplication;
 
   beforeAll(async () => {
     const moduleFixture = await Test.createTestingModule({
-      imports: [
-        ConfigModule.forRoot(ConfigOptions),
-        TypeOrmModule.forRootAsync(TypeOrmAsyncOptions),
-        HealthModule,
-      ],
+      imports: [AppModule],
     }).compile();
 
     app = moduleFixture.createNestApplication();
     await app.init();
+  });
+
+  afterAll(async () => {
+    await app.close();
   });
 
   it('/health (GET)', () => {

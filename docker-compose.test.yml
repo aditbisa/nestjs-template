@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  mariadb-test:
+    image: mariadb:10.11
+    restart: always
+    environment:
+      - MARIADB_ROOT_PASSWORD=root
+      - MARIADB_USER=mariadb
+      - MARIADB_PASSWORD=mariadb
+      - MARIADB_DATABASE=pesat_test
+    ports:
+      - '3306:3306'
+
+networks:
+  default:
+    name: backend_test
