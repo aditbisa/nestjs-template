@@ -18,5 +18,6 @@
     "^@models/(.*)$": "<rootDir>/../src/models/$1",
     "^@schemas/(.*)$": "<rootDir>/../src/schemas/$1",
     "^@src/(.*)$": "<rootDir>/../src/$1"
-  }
+  },
+  "setupFiles": ["./setup-env.ts"]
 }
