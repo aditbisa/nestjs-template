@@ -17,7 +17,9 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "typeorm": "typeorm-ts-node-commonjs -d ./migrations/data-source.ts",
+    "db:migrate": "typeorm-ts-node-commonjs migration:run -d ./migrations/data-source.ts"
   },
   "dependencies": {
     "@nestjs/common": "^9.0.0",
@@ -72,6 +74,7 @@
       "**/*.(t|j)s"
     ],
     "moduleNameMapper": {
+      "^@migrations/(.*)$": "<rootDir>/../migrations/$1",
       "^@test/(.*)$": "<rootDir>/../test/$1",
       "^@commons/(.*)$": "<rootDir>/commons/$1",
       "^@decorators/(.*)$": "<rootDir>/commons/decorators/$1",
