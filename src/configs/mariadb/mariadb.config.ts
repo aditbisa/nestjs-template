@@ -19,6 +19,6 @@ export const MariadbConfigSchema = Joi.object({
   MARIADB_HOST: Joi.string().default('127.0.0.1'),
   MARIADB_PORT: Joi.number().default(3306),
   MARIADB_USER: Joi.string().default('mariadb'),
-  MARIADB_PASSWORD: Joi.string().default('password'),
+  MARIADB_PASSWORD: Joi.string().default(''),
   MARIADB_DATABASE: Joi.string().default('mariadb'),
 });

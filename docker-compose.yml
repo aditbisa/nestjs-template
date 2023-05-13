@@ -7,7 +7,7 @@ services:
     environment:
       - MARIADB_ROOT_PASSWORD=root
       - MARIADB_USER=mariadb
-      - MARIADB_PASSWORD=mariadb
+      - MARIADB_PASSWORD=password
       - MARIADB_DATABASE=pesat
     ports:
       - '3306:3306'
