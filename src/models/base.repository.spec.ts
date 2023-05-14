@@ -185,9 +185,37 @@ describe('BaseRepository', () => {
     const result = await testRepository.delete(created.id);
     expect(result.affected).toBe(1);
 
-    const check = await manager.findOneBy<TestEntity>(TestEntity, {
+    const checkSoft = await manager.findOneBy<TestEntity>(TestEntity, {
       id: created.id,
     });
-    expect(check).toBeFalsy();
+    expect(checkSoft).toBeFalsy();
+
+    const checkHard = await manager.findOne<TestEntity>(TestEntity, {
+      where: { id: created.id },
+      withDeleted: true,
+    });
+    expect(checkHard).toBeFalsy();
+  });
+
+  it('should soft-delete the data', async () => {
+    const created = await manager.save(TestEntity, {
+      data: { state: 2 },
+      secret: 'secret',
+    });
+
+    const result = await testRepository.softDelete(created.id);
+    expect(result.affected).toBe(1);
+
+    const checkSoft = await manager.findOneBy<TestEntity>(TestEntity, {
+      id: created.id,
+    });
+    expect(checkSoft).toBeFalsy();
+
+    const checkHard = await manager.findOne<TestEntity>(TestEntity, {
+      where: { id: created.id },
+      withDeleted: true,
+    });
+    expect(checkHard).toBeTruthy();
+    expect(checkHard.data).toEqual({ state: 2 });
   });
 });

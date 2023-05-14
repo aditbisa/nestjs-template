@@ -1,5 +1,6 @@
 import {
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -27,6 +28,10 @@ export abstract class BaseEntity {
   @UpdateDateColumn()
   @Expose({ groups: ['timestamps'] })
   updatedAt: Date;
+
+  @DeleteDateColumn()
+  @Expose({ groups: ['timestamps'] })
+  deleteAt: Date;
 
   /**
    * Json serializer to be used by `JSON.stringify`.

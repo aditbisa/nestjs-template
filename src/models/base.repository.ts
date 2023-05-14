@@ -7,6 +7,7 @@ import {
   FindOneOptions,
   FindOptionsWhere,
   Repository,
+  UpdateResult,
 } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
@@ -144,5 +145,14 @@ export abstract class BaseRepository<TEntity extends BaseEntity> {
    */
   async delete(entityId: BaseEntity['id']): Promise<DeleteResult> {
     return this.repository.delete(entityId);
+  }
+
+  /**
+   * Soft delete entity from database.
+   *
+   * @param entityId - Entity Id.
+   */
+  async softDelete(entityId: BaseEntity['id']): Promise<UpdateResult> {
+    return this.repository.softDelete(entityId);
   }
 }
