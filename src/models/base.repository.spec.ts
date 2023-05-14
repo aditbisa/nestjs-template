@@ -70,6 +70,7 @@ describe('BaseRepository', () => {
     expect(entity.id).toBe(1);
     expect(entity.createdAt).toBeInstanceOf(Date);
     expect(entity.updatedAt).toBeInstanceOf(Date);
+    expect(entity.deleteAt).toBeNull();
     expect(entity.data).toEqual(inputs.data);
     expect(entity.flag).toBe(true);
     expect(entity.secret).toBe(inputs.secret);
@@ -83,6 +84,7 @@ describe('BaseRepository', () => {
     expect(check.id).toBe(1);
     expect(check.createdAt).toEqual(entity.createdAt);
     expect(check.updatedAt).toEqual(entity.updatedAt);
+    expect(check.deleteAt).toBeNull();
     expect(check.data).toEqual(entity.data);
     expect(check.flag).toBe(entity.flag);
     expect(check.secret).toBe(entity.secret);
@@ -216,6 +218,7 @@ describe('BaseRepository', () => {
       withDeleted: true,
     });
     expect(checkHard).toBeTruthy();
+    expect(checkHard.deleteAt).not.toBeNull();
     expect(checkHard.data).toEqual({ state: 2 });
   });
 });

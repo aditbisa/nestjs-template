@@ -31,7 +31,7 @@ export abstract class BaseEntity {
 
   @DeleteDateColumn()
   @Expose({ groups: ['timestamps'] })
-  deleteAt: Date;
+  deleteAt: Date | null;
 
   /**
    * Json serializer to be used by `JSON.stringify`.
