@@ -30,17 +30,15 @@ export abstract class BaseRepository<TEntity extends BaseEntity> {
   abstract get repository(): Repository<TEntity>;
 
   /**
-   * Finds first entity by a given criteria and load its relations.
+   * Finds first entity by a given criteria.
    *
    * @param criteria - Entity Id or simple condition that should be applied to match entities.
-   * @param relations - Indicates what relations of entity should be loaded (simplified left join form).
    * @param throwsException - Flag for when data not found. Rather than returning null, throw an exception instead.
    * @param options - More options for finding entity.
    * @returns - First entity found or null.
    */
   async findOne(
     criteria: BaseEntity['id'] | FindOptionsWhere<TEntity>,
-    relations: string[] = [],
     throwsException = false,
     options: FindOneOptions<TEntity> = {},
   ): Promise<TEntity | null> {
@@ -48,7 +46,6 @@ export abstract class BaseRepository<TEntity extends BaseEntity> {
       criteria = { id: criteria } as FindOptionsWhere<TEntity>;
     }
     options.where = criteria as FindOptionsWhere<TEntity>;
-    options.relations = relations;
     return this.repository
       .findOne(options)
       .then((entity) => {
@@ -61,36 +58,32 @@ export abstract class BaseRepository<TEntity extends BaseEntity> {
   }
 
   /**
-   * Finds last entity by a given criteria and load its relations.
+   * Finds last entity by a given criteria.
    *
    * @param criteria - Entity Id or simple condition that should be applied to match entities.
-   * @param relations - Indicates what relations of entity should be loaded (simplified left join form).
    * @param throwsException - Flag for when data not found. Rather than returning null, throw an exception instead.
    * @param options - More options for finding entity.
    * @returns - Last entity found or null.
    */
   async findLastOne(
     criteria: BaseEntity['id'] | FindOptionsWhere<TEntity>,
-    relations: string[] = [],
     throwsException = false,
     options: FindOneOptions<TEntity> = {},
   ): Promise<TEntity | null> {
     // @ts-expect-error Cannot satisfy type definition even using valid code.
     options.order = { id: 'DESC' };
-    return this.findOne(criteria, relations, throwsException, options);
+    return this.findOne(criteria, throwsException, options);
   }
 
   /**
-   * Finds entities by a given criteria and load its relations.
+   * Finds entities by a given criteria.
    *
    * @param criteria - Simple condition that should be applied to match entities.
-   * @param relations - Indicates what relations of entity should be loaded (simplified left join form).
    * @param options - More options for finding entities.
    * @returns - All entities found or an empty array.
    */
   async findMany(
     criteria: FindOptionsWhere<TEntity>,
-    relations: string[] = [],
     options: FindManyOptions<TEntity> = {},
   ): Promise<TEntity[]> {
     if (!options.order) {
@@ -98,7 +91,6 @@ export abstract class BaseRepository<TEntity extends BaseEntity> {
       options.order = { id: 'DESC' };
     }
     options.where = criteria;
-    options.relations = relations;
     return this.repository
       .find(options)
       .catch((error) => Promise.reject(error));
@@ -124,17 +116,17 @@ export abstract class BaseRepository<TEntity extends BaseEntity> {
    *
    * @param entityId - Entity Id.
    * @param inputs - Data for update.
-   * @param relations - Indicates what relations of entity should be loaded (simplified left join form).
+   * @param options - More options for loading the entity.
    * @returns - An updated entity.
    */
   async update(
     entityId: BaseEntity['id'],
     inputs: DeepPartial<TEntity>, // TS error when using QueryDeepPartialEntity<TEntity>.
-    relations: string[] = [],
+    options: FindOneOptions<TEntity> = {},
   ): Promise<TEntity> {
     return this.repository
       .update(entityId, inputs as QueryDeepPartialEntity<TEntity>)
-      .then(() => this.findOne(entityId, relations, true))
+      .then(() => this.findOne(entityId, true, options))
       .catch((error) => Promise.reject(error));
   }
 

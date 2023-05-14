@@ -125,7 +125,7 @@ describe('BaseRepository', () => {
   it('should throw exception for non-existent id', async () => {
     let error;
     try {
-      await testRepository.findOne(999, [], true);
+      await testRepository.findOne(999, true);
     } catch (err) {
       error = err;
     }
