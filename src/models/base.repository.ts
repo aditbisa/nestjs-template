@@ -112,7 +112,7 @@ export abstract class BaseRepository<TEntity extends BaseEntity> {
   }
 
   /**
-   * Update and load entity with its relations from database.
+   * Update and load entity from database.
    *
    * @param entityId - Entity Id.
    * @param inputs - Data for update.
