@@ -9,6 +9,6 @@ export default new DataSource({
   password: process.env.MARIADB_PASSWORD,
   database: process.env.MARIADB_DATABASE,
   entities: [],
-  timezone: '+07:00', // Jakarta
+  timezone: 'Z',
   migrations: ['@migrations/scripts/*'],
 });

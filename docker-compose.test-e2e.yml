@@ -9,6 +9,7 @@ services:
       - MARIADB_USER=mariadb
       - MARIADB_PASSWORD=password
       - MARIADB_DATABASE=pesat_test
+      - TZ=UTC
     ports:
       - '3307:3306'
 
