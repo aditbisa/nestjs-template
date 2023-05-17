@@ -20,5 +20,5 @@
     "^@schemas/(.*)$": "<rootDir>/../src/schemas/$1",
     "^@src/(.*)$": "<rootDir>/../src/$1"
   },
-  "setupFiles": ["./setup-env.ts"]
+  "globalSetup": "./setup.ts"
 }
