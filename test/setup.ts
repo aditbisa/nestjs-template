@@ -1,9 +1,10 @@
 import { DataSource } from 'typeorm';
 
-process.env.MARIADB_DATABASE = 'pesat_test';
+const MARIADB_DATABASE = 'pesat_test';
+process.env.MARIADB_DATABASE = MARIADB_DATABASE;
 
 export default async function setup() {
-  const dataSource = new DataSource({
+  const ds = new DataSource({
     type: 'mariadb',
     connectorPackage: 'mysql2',
     host: process.env.MARIADB_HOST,
@@ -13,12 +14,13 @@ export default async function setup() {
   });
 
   try {
-    await dataSource.initialize();
-    await dataSource.query('CREATE DATABASE IF NOT EXISTS `pesat_test`');
-    await dataSource.query("GRANT ALL ON `pesat_test`.* TO 'mariadb'@'%'");
-    await dataSource.query('FLUSH PRIVILEGES');
+    await ds.initialize();
+    await ds.query(`DROP DATABASE IF EXISTS \`${MARIADB_DATABASE}\``);
+    await ds.query(`CREATE DATABASE IF NOT EXISTS \`${MARIADB_DATABASE}\``);
+    await ds.query(`GRANT ALL ON \`${MARIADB_DATABASE}\`.* TO 'mariadb'@'%'`);
+    await ds.query(`FLUSH PRIVILEGES`);
   } catch (err) {
     console.error('Setup Error', err);
   }
-  await dataSource.destroy();
+  await ds.destroy();
 }
