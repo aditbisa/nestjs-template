@@ -84,7 +84,7 @@
       "^@filters/(.*)$": "<rootDir>/commons/filters/$1",
       "^@helpers/(.*)$": "<rootDir>/commons/helpers/$1",
       "^@configs/(.*)$": "<rootDir>/configs/$1",
-      "^@controllers/(.*)$": "<rootDir>/controllers/$1",
+      "^@endpoints/(.*)$": "<rootDir>/endpoints/$1",
       "^@models/(.*)$": "<rootDir>/models/$1",
       "^@schemas/(.*)$": "<rootDir>/schemas/$1",
       "^@src/(.*)$": "<rootDir>/$1"

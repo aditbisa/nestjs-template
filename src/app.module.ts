@@ -4,7 +4,7 @@ import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MariadbConfigModule, MariadbConfigService } from '@configs/mariadb';
-import { HealthModule } from '@controllers/health';
+import { HealthModule } from '@endpoints/health';
 
 @Module({
   imports: [

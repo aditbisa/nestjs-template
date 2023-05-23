@@ -15,7 +15,7 @@
     "^@filters/(.*)$": "<rootDir>/../src/commons/filters/$1",
     "^@helpers/(.*)$": "<rootDir>/../src/commons/helpers/$1",
     "^@configs/(.*)$": "<rootDir>/../src/configs/$1",
-    "^@controllers/(.*)$": "<rootDir>/../src/controllers/$1",
+    "^@endpoints/(.*)$": "<rootDir>/../src/endpoints/$1",
     "^@models/(.*)$": "<rootDir>/../src/models/$1",
     "^@schemas/(.*)$": "<rootDir>/../src/schemas/$1",
     "^@src/(.*)$": "<rootDir>/../src/$1"

@@ -26,7 +26,7 @@
       "@filters/*": ["src/commons/filters/*"],
       "@helpers/*": ["src/commons/helpers/*"],
       "@configs/*": ["src/configs/*"],
-      "@controllers/*": ["src/controllers/*"],
+      "@endpoints/*": ["src/endpoints/*"],
       "@models/*": ["src/models/*"],
       "@schemas/*": ["src/schemas/*"],
       "@src/*": ["src/*"]
