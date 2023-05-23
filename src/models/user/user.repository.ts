@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { DeepPartial, FindOneOptions } from 'typeorm';
+import { DataSource, DeepPartial, FindOneOptions } from 'typeorm';
 import * as argon2 from 'argon2';
 
 import { BaseRepository } from '@models/base.repository';
+import { AppConfigService } from '@configs/app';
 import { User } from './user.entity';
 
 /**
@@ -10,6 +11,13 @@ import { User } from './user.entity';
  */
 @Injectable()
 export class UserRepository extends BaseRepository<User> {
+  constructor(
+    protected readonly dataSource: DataSource,
+    private appConfig: AppConfigService,
+  ) {
+    super(dataSource);
+  }
+
   /**
    * Getting repository from DataSource.
    */
@@ -24,7 +32,20 @@ export class UserRepository extends BaseRepository<User> {
    * @returns - Password hash.
    */
   private hashPassword(password: string): Promise<string> {
-    return argon2.hash(password);
+    const salt = Buffer.from(this.appConfig.salt);
+    return argon2.hash(password, { salt });
+  }
+
+  /**
+   * Verify password.
+   *
+   * @param hash - The user hashed password.
+   * @param password - The user password.
+   * @returns - True if match.
+   */
+  private verifyPassword(hash: string, password: string): Promise<boolean> {
+    const salt = Buffer.from(this.appConfig.salt);
+    return argon2.verify(hash, password, { salt });
   }
 
   /**
@@ -72,7 +93,7 @@ export class UserRepository extends BaseRepository<User> {
   async verify(username: string, password: string): Promise<User | false> {
     const user = await this.findOne({ username });
 
-    if (user && (await argon2.verify(user.password, password))) {
+    if (user && (await this.verifyPassword(user.password, password))) {
       const updateData: DeepPartial<User> = { lastLoginAt: new Date() };
 
       if (argon2.needsRehash(user.password)) {

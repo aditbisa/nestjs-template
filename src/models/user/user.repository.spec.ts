@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { EntityManager } from 'typeorm';
 import * as argon2 from 'argon2';
 
+import { AppConfigModule } from '@configs/app';
 import { UserRepository } from './user.repository';
 import { User } from './user.entity';
 
@@ -12,6 +13,8 @@ describe('UserRepository', () => {
   let manager: EntityManager;
 
   beforeAll(async () => {
+    process.env.APP_SALT = '12345678';
+
     module = await Test.createTestingModule({
       imports: [
         TypeOrmModule.forRoot({
@@ -20,6 +23,7 @@ describe('UserRepository', () => {
           synchronize: true,
           entities: [User],
         }),
+        AppConfigModule,
       ],
       providers: [UserRepository],
     }).compile();

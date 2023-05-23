@@ -10,6 +10,7 @@ export const AppConfig = registerAs('app', () => ({
   description: process.env.APP_DESCRIPTION,
   url: process.env.APP_URL,
   port: process.env.APP_PORT,
+  salt: process.env.APP_SALT,
 }));
 
 /**
@@ -23,4 +24,5 @@ export const AppConfigSchema = Joi.object({
   APP_DESCRIPTION: Joi.string().default(''),
   APP_URL: Joi.string().default('http://localhost:3000'),
   APP_PORT: Joi.number().default(3000),
+  APP_SALT: Joi.string(),
 });
