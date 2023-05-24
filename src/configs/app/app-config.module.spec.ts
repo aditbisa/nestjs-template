@@ -3,10 +3,12 @@ import { Test } from '@nestjs/testing';
 import { AppConfigService } from './app-config.service';
 
 describe('AppConfigModule', () => {
-  let appConfig: AppConfigService;
+  /**
+   * We didn't test `.env` file as it will be inconsistent on different setup.
+   */
+  let config: AppConfigService;
 
   it('should compile the module', async () => {
-    // Set env vars
     process.env.APP_NAME = 'Pesat System';
     process.env.APP_URL = 'https://test:3000';
 
@@ -16,17 +18,12 @@ describe('AppConfigModule', () => {
     }).compile();
     expect(module).toBeDefined();
 
-    appConfig = module.get(AppConfigService);
-    expect(appConfig).toBeInstanceOf(AppConfigService);
+    config = module.get(AppConfigService);
+    expect(config).toBeInstanceOf(AppConfigService);
   });
 
   it('should return value', async () => {
-    // Default values
-    expect(appConfig.description).toBe('');
-    expect(appConfig.port).toBe(3000);
-
-    // Modified values
-    expect(appConfig.name).toBe('Pesat System');
-    expect(appConfig.url).toBe('https://test:3000');
+    expect(config.name).toBe('Pesat System');
+    expect(config.url).toBe('https://test:3000');
   });
 });

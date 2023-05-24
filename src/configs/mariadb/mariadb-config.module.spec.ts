@@ -3,10 +3,12 @@ import { Test } from '@nestjs/testing';
 import { MariadbConfigService } from './mariadb-config.service';
 
 describe('MariadbConfigModule', () => {
-  let mariadbConfig: MariadbConfigService;
+  /**
+   * We didn't test `.env` file as it will be inconsistent on different setup.
+   */
+  let config: MariadbConfigService;
 
   it('should compile the module', async () => {
-    // Set env vars
     process.env.MARIADB_USER = 'userdb';
     process.env.MARIADB_PASSWORD = 'secret';
 
@@ -16,17 +18,12 @@ describe('MariadbConfigModule', () => {
     }).compile();
     expect(module).toBeDefined();
 
-    mariadbConfig = module.get(MariadbConfigService);
-    expect(mariadbConfig).toBeInstanceOf(MariadbConfigService);
+    config = module.get(MariadbConfigService);
+    expect(config).toBeInstanceOf(MariadbConfigService);
   });
 
   it('should return value', async () => {
-    // Default values
-    expect(mariadbConfig.host).toBe('127.0.0.1');
-    expect(mariadbConfig.port).toBe(3306);
-
-    // Modified values
-    expect(mariadbConfig.user).toBe('userdb');
-    expect(mariadbConfig.password).toBe('secret');
+    expect(config.user).toBe('userdb');
+    expect(config.password).toBe('secret');
   });
 });
