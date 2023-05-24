@@ -25,6 +25,7 @@
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.3.1",
     "@nestjs/core": "^9.0.0",
+    "@nestjs/jwt": "^10.0.3",
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/terminus": "^9.2.2",
     "@nestjs/typeorm": "^9.0.1",
@@ -86,7 +87,7 @@
       "^@configs/(.*)$": "<rootDir>/configs/$1",
       "^@endpoints/(.*)$": "<rootDir>/endpoints/$1",
       "^@models/(.*)$": "<rootDir>/models/$1",
-      "^@schemas/(.*)$": "<rootDir>/schemas/$1",
+      "^@schemas$": "<rootDir>/schemas",
       "^@src/(.*)$": "<rootDir>/$1"
     },
     "coverageDirectory": "../coverage",
