@@ -28,7 +28,7 @@
       "@configs/*": ["src/configs/*"],
       "@endpoints/*": ["src/endpoints/*"],
       "@models/*": ["src/models/*"],
-      "@schemas/*": ["src/schemas/*"],
+      "@schemas": ["src/schemas"],
       "@src/*": ["src/*"]
     }
   }

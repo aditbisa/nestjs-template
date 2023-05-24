@@ -17,7 +17,7 @@
     "^@configs/(.*)$": "<rootDir>/../src/configs/$1",
     "^@endpoints/(.*)$": "<rootDir>/../src/endpoints/$1",
     "^@models/(.*)$": "<rootDir>/../src/models/$1",
-    "^@schemas/(.*)$": "<rootDir>/../src/schemas/$1",
+    "^@schemas$": "<rootDir>/../src/schemas",
     "^@src/(.*)$": "<rootDir>/../src/$1"
   },
   "globalSetup": "./setup.ts"
