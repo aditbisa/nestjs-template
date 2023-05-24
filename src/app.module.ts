@@ -3,6 +3,7 @@ import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AppConfigModule } from '@configs/app';
 import { MariadbConfigModule, MariadbConfigService } from '@configs/mariadb';
 import { ENTITIES } from '@models/entities';
 import { HealthModule } from '@endpoints/health';
@@ -29,6 +30,7 @@ import { AuthModule } from '@endpoints/auth';
         return options;
       },
     }),
+    AppConfigModule,
     HealthModule,
     AuthModule,
   ],

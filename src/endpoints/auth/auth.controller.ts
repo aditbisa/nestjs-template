@@ -1,6 +1,14 @@
-import { Body, Controller, Post, HttpCode, HttpStatus } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  HttpCode,
+  HttpStatus,
+  Get,
+} from '@nestjs/common';
 
-import { JwtToken } from '@schemas';
+import { JwtToken, JwtParsedPayload } from '@schemas';
+import { JwtParsePayload, Public } from '@commons/decorators';
 import { AuthService } from './auth.service';
 import { SignInDto } from './auth.dto';
 
@@ -14,9 +22,22 @@ export class AuthController {
    * @param signInDto
    * @returns - JWT Token.
    */
+  @Public()
   @HttpCode(HttpStatus.OK)
   @Post('login')
   signIn(@Body() signInDto: SignInDto): Promise<JwtToken> {
     return this.authService.signIn(signInDto.username, signInDto.password);
+  }
+
+  /**
+   * Get user profile.
+   *
+   * @param tokenPayload - JWT token parsed payload.
+   * @returns - User profile.
+   */
+  @Get('profile')
+  getProfile(@JwtParsePayload() tokenPayload: JwtParsedPayload) {
+    /** @todo Get more info from database. */
+    return tokenPayload;
   }
 }

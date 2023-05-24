@@ -2,7 +2,7 @@ import { Test } from '@nestjs/testing';
 import { UnauthorizedException } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 
-import { TOKEN_TYPE } from '@schemas';
+import { JWT_TOKEN_TYPE } from '@schemas';
 import { JwtConfigService } from '@configs/jwt';
 import { User, UserRepository } from '@models/user';
 import { AuthService } from './auth.service';
@@ -51,7 +51,7 @@ describe('AuthService', () => {
     expect(result).toBeTruthy();
     expect(result.access_token).toBeTruthy();
     expect(result.expires_in).toBe(jwtConfigMock.expiresIn);
-    expect(result.token_type).toBe(TOKEN_TYPE);
+    expect(result.token_type).toBe(JWT_TOKEN_TYPE);
   });
 
   it('should throw unauthorized on invalid credentials', async () => {

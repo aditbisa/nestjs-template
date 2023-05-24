@@ -6,6 +6,8 @@ import {
   TypeOrmHealthIndicator,
 } from '@nestjs/terminus';
 
+import { Public } from '@commons/decorators';
+
 @Controller('health')
 export class HealthController {
   constructor(
@@ -13,6 +15,7 @@ export class HealthController {
     private db: TypeOrmHealthIndicator,
   ) {}
 
+  @Public()
   @Get()
   @HealthCheck()
   check(): Promise<HealthCheckResult> {

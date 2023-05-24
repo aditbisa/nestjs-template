@@ -1,7 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
-import { JwtToken, TOKEN_TYPE } from '@schemas';
+import { JwtToken, JWT_TOKEN_TYPE } from '@schemas';
 import { User, UserRepository } from '@models/user';
 import { JwtConfigService } from '@configs/jwt';
 
@@ -23,7 +23,7 @@ export class AuthService {
     const payload = { sub: user.id, username: user.username };
     const access_token = await this.jwtService.signAsync(payload);
     const expires_in = this.jwtConfig.expiresIn;
-    const token_type = TOKEN_TYPE;
+    const token_type = JWT_TOKEN_TYPE;
     return { access_token, expires_in, token_type };
   }
 

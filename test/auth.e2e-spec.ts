@@ -29,14 +29,30 @@ describe('AuthController (e2e)', () => {
     await app.close();
   });
 
-  it('/auth/login (POST)', () => {
-    return request(app.getHttpServer())
+  it('/auth/login (POST)', async () => {
+    const res: request.Response = await request(app.getHttpServer())
       .post('/auth/login')
       .send({
         username: userMock.username,
         password: userMock.password,
       })
-      .expect(200)
-      .expect('jwt-token');
+      .expect(200);
+    expect(res.body.access_token).toBeTruthy();
+  });
+
+  it('/auth/profile (GET)', async () => {
+    const res1: request.Response = await request(app.getHttpServer())
+      .post('/auth/login')
+      .send({
+        username: userMock.username,
+        password: userMock.password,
+      });
+    const token = res1.body.access_token;
+
+    const res2: request.Response = await request(app.getHttpServer())
+      .get('/auth/profile')
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200);
+    expect(res2.body.username).toBe(userMock.username);
   });
 });
