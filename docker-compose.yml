@@ -7,10 +7,11 @@ services:
     restart: always
     environment:
       - MARIADB_ROOT_PASSWORD=root
-      - MARIADB_USER=mariadb
-      - MARIADB_PASSWORD=password
-      - MARIADB_DATABASE=pesat
-      - TZ=UTC
+      # Load from dotenv file
+      # - MARIADB_USER=mariadb
+      # - MARIADB_PASSWORD=password
+      # - MARIADB_DATABASE=pesat
+      # - TZ=UTC
     ports:
       - '3306:3306'
     volumes:
