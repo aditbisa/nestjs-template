@@ -25,6 +25,7 @@
       "@endpoints/*": ["src/endpoints/*"],
       "@models/*": ["src/models/*"],
       "@schemas": ["src/schemas"],
+      "@commands": ["src/commands"],
       "@src/*": ["src/*"]
     }
   }
