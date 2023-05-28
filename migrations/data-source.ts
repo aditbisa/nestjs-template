@@ -1,4 +1,7 @@
 import { DataSource } from 'typeorm';
+import 'dotenv/config';
+
+import { ENTITIES } from '@models/entities';
 
 export default new DataSource({
   type: 'mariadb',
@@ -8,7 +11,7 @@ export default new DataSource({
   username: process.env.MARIADB_USER,
   password: process.env.MARIADB_PASSWORD,
   database: process.env.MARIADB_DATABASE,
-  entities: [],
+  entities: ENTITIES,
   timezone: 'Z',
   migrations: ['@migrations/scripts/*'],
 });
