@@ -1,6 +1,7 @@
 import { Column, Entity } from 'typeorm';
 import { Exclude } from 'class-transformer';
 
+import { UserRole } from '@schemas';
 import { BaseEntity } from '@models/base.entity';
 
 /**
@@ -17,4 +18,7 @@ export class User extends BaseEntity {
 
   @Column()
   lastLoginAt: Date;
+
+  @Column()
+  role: UserRole;
 }

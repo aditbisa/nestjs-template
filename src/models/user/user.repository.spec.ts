@@ -7,6 +7,12 @@ import { AppConfigModule } from '@configs/app';
 import { UserRepository } from './user.repository';
 import { User } from './user.entity';
 
+const userMock = {
+  username: 'username',
+  password: 'password',
+  role: 'courier',
+} as User;
+
 describe('UserRepository', () => {
   let module: TestingModule;
   let userRepository: UserRepository;
@@ -37,81 +43,74 @@ describe('UserRepository', () => {
   });
 
   it('should create new user with hashed password', async () => {
-    const inputs = { username: 'a-user', password: 'secret' };
-
-    const entity = await userRepository.create({ ...inputs });
+    const entity = await userRepository.create({ ...userMock });
     expect(entity).toBeInstanceOf(User);
 
     const check = await manager.findOneBy<User>(User, { id: entity.id });
-    expect(check.username).toBe(inputs.username);
+    expect(check.username).toBe(userMock.username);
     expect(check.password).toBeTruthy();
-    expect(check.password).not.toBe(inputs.password);
+    expect(check.password).not.toBe(userMock.password);
     expect(check.lastLoginAt).toBeInstanceOf(Date);
   });
 
   it('should fail create user with existing username', async () => {
-    const inputs = { username: 'a-user', password: 'secret' };
-    await userRepository.create(inputs);
-    await expect(() => userRepository.create(inputs)).rejects.toThrow();
+    await userRepository.create({ ...userMock });
+    await expect(() => userRepository.create(userMock)).rejects.toThrow();
   });
 
   it('should update user with hashed password', async () => {
-    const inputs = { username: 'a-user', password: 'secret' };
-    const entity = await userRepository.create({ ...inputs });
+    const entity = await userRepository.create({ ...userMock });
 
     const newPassword = 'new-secret';
     await userRepository.update(entity.id, { password: newPassword });
 
     const check = await manager.findOneBy<User>(User, { id: entity.id });
     expect(check.password).toBeTruthy();
-    expect(check.password).not.toBe(inputs.password);
+    expect(check.password).not.toBe(userMock.password);
     expect(check.password).not.toBe(newPassword);
   });
 
   it('should login user with valid credentials', async () => {
-    const inputs = { username: 'a-user', password: 'secret' };
-    const entity = await userRepository.create({ ...inputs });
+    const entity = await userRepository.create({ ...userMock });
 
     const authed = await userRepository.verify(
-      inputs.username,
-      inputs.password,
+      userMock.username,
+      userMock.password,
     );
     expect(authed).toBeInstanceOf(User);
     expect((authed as User).id).toBe(entity.id);
-    expect((authed as User).username).toBe(inputs.username);
+    expect((authed as User).username).toBe(userMock.username);
     expect((authed as User).lastLoginAt.valueOf()).toBeGreaterThan(
       entity.lastLoginAt.valueOf(),
     );
   });
 
   it('should rehash password on user login', async () => {
-    const inputs = { username: 'a-user', password: 'secret' };
-    const oldHashedPassword = await argon2.hash(inputs.password, {
+    const oldHashedPassword = await argon2.hash(userMock.password, {
       version: 0x1,
     });
     await userRepository.repository.insert({
-      username: inputs.username,
+      ...userMock,
       password: oldHashedPassword,
       lastLoginAt: new Date(),
     });
 
     const authed = await userRepository.verify(
-      inputs.username,
-      inputs.password,
+      userMock.username,
+      userMock.password,
     );
     expect(authed).toBeInstanceOf(User);
-    expect((authed as User).username).toBe(inputs.username);
+    expect((authed as User).username).toBe(userMock.username);
     expect((authed as User).password).not.toBe(oldHashedPassword);
   });
 
   it('should not login user with invalid credentials', async () => {
-    const inputs = { username: 'a-user', password: 'secret' };
-    await userRepository.create({ ...inputs });
+    await userRepository.create({ ...userMock });
 
-    const authed1 = await userRepository.verify(inputs.username, 'incorrect');
+    const authed1 = await userRepository.verify(userMock.username, 'incorrect');
     expect(authed1).toBe(false);
 
-    const authed2 = await userRepository.verify('incorrect', inputs.password);
+    const authed2 = await userRepository.verify('incorrect', userMock.password);
     expect(authed2).toBe(false);
 
     const authed3 = await userRepository.verify('incorrect', 'incorrect');

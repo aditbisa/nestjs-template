@@ -3,12 +3,13 @@ import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 
 import { AppModule } from '@src/app.module';
-import { UserModule, UserRepository } from '@models/user';
+import { User, UserModule, UserRepository } from '@models/user';
 
 const userMock = {
-  username: 'a-user',
-  password: 'secret',
-};
+  username: 'username',
+  password: 'password',
+  role: 'courier',
+} as User;
 
 describe('AuthController (e2e)', () => {
   let app: INestApplication;
