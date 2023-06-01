@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { Command, CommandRunner } from 'nest-commander';
 
-import { UserModule, UserRepository } from '@models/user';
+import { UserRepositoryModule, UserRepository } from '@models/user';
 
 @Command({
   name: 'sa',
@@ -40,7 +40,7 @@ export class SetupSysAdminCommand extends CommandRunner {
 }
 
 @Module({
-  imports: [UserModule],
+  imports: [UserRepositoryModule],
   providers: [SetupSysAdminCommand],
 })
 export class SetupSysAdminModule {}

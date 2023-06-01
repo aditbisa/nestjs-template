@@ -8,4 +8,4 @@ import { AppConfigModule } from '@configs/app';
   providers: [UserRepository],
   exports: [UserRepository],
 })
-export class UserModule {}
+export class UserRepositoryModule {}

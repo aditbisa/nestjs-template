@@ -3,7 +3,7 @@ import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 
 import { AppModule } from '@src/app.module';
-import { User, UserModule, UserRepository } from '@models/user';
+import { User, UserRepositoryModule, UserRepository } from '@models/user';
 
 const userMock = {
   username: 'username',
@@ -16,7 +16,7 @@ describe('AuthController (e2e)', () => {
 
   beforeAll(async () => {
     const moduleFixture = await Test.createTestingModule({
-      imports: [AppModule, UserModule],
+      imports: [AppModule, UserRepositoryModule],
     }).compile();
 
     app = moduleFixture.createNestApplication();
