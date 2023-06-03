@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Exclude } from 'class-transformer';
-import { Column, Entity, EntityManager, Like } from 'typeorm';
+import { Column, Entity, EntityManager, Like, Not } from 'typeorm';
 
 import { BaseEntity } from './base.entity';
 import { BaseRepository } from './base.repository';
@@ -159,6 +159,39 @@ describe('BaseRepository', () => {
     expect(entities.length).toBe(2);
     expect(entities[0].data).toBe('data2');
     expect(entities[1].data).toBe('data1');
+  });
+
+  it('should find paginated data with simple condition', async () => {
+    /**
+     * Demonstrate the findMany method with the SQL LIKE operator.
+     */
+    for (let i = 1; i <= 5; i++) {
+      await manager.save(TestEntity, { data: `d${i}`, secret: 's${i}' });
+    }
+    await manager.save(TestEntity, { data: 'skipped', secret: '' });
+    for (let i = 6; i <= 10; i++) {
+      await manager.save(TestEntity, { data: `d${i}`, secret: 's${i}' });
+    }
+
+    const ls1 = await testRepository.findPaginated(1, 2, { secret: Not('') });
+    expect(ls1.data.length).toBe(2);
+    expect(ls1.data[0].data).toBe('d10');
+    expect(ls1.data[1].data).toBe('d9');
+    expect(ls1.page).toBe(1);
+    expect(ls1.count).toBe(2);
+    expect(ls1.countPerPage).toBe(2);
+    expect(ls1.totalPage).toBe(5);
+    expect(ls1.totalCount).toBe(10);
+
+    const ls2 = await testRepository.findPaginated(3, 4, { secret: Not('') });
+    expect(ls2.data.length).toBe(2);
+    expect(ls2.data[0].data).toBe('d2');
+    expect(ls2.data[1].data).toBe('d1');
+    expect(ls2.page).toBe(3);
+    expect(ls2.count).toBe(2);
+    expect(ls2.countPerPage).toBe(4);
+    expect(ls2.totalPage).toBe(3);
+    expect(ls2.totalCount).toBe(10);
   });
 
   it('should update the data', async () => {

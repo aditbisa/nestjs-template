@@ -11,6 +11,7 @@ import {
 } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
+import { PaginatedData } from '@schemas';
 import { BaseEntity } from './base.entity';
 
 /**
@@ -93,6 +94,45 @@ export abstract class BaseRepository<TEntity extends BaseEntity> {
     options.where = criteria;
     return this.repository
       .find(options)
+      .catch((error) => Promise.reject(error));
+  }
+
+  /**
+   * Finds entities by a given criteria and paginate the result with default order DESC.
+   *
+   * @param criteria - Simple condition that should be applied to match entities.
+   * @param options - More options for finding entities and pagination.
+   * @returns - Paginated data founds.
+   */
+  async findPaginated(
+    page: number,
+    countPerPage: number,
+    criteria: FindOptionsWhere<TEntity> = {},
+    options: FindManyOptions<TEntity> = {},
+  ): Promise<PaginatedData<TEntity>> {
+    if (!options.order) {
+      // @ts-expect-error Cannot satisfy type definition even using valid code.
+      options.order = { id: 'DESC' };
+    }
+    options.where = criteria;
+    options.skip = countPerPage * (page - 1);
+    options.take = countPerPage;
+
+    return this.repository
+      .findAndCount(options)
+      .then((result: [TEntity[], number]) => {
+        const data = result[0];
+        const totalCount = result[1];
+        const totalPage = Math.ceil(totalCount / countPerPage) || 1;
+        return {
+          data,
+          page,
+          count: data.length,
+          countPerPage,
+          totalPage,
+          totalCount,
+        };
+      })
       .catch((error) => Promise.reject(error));
   }
 
