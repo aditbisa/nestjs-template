@@ -26,6 +26,7 @@ export function getJWTParsedPayloadFactory(
   return {
     userId: payload['sub'],
     username: payload['username'],
+    role: payload['role'],
   };
 }
 

@@ -1,7 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
-import { JwtToken, JWT_TOKEN_TYPE } from '@schemas';
+import { JwtToken, JWT_TOKEN_TYPE, JwtCustomPayload } from '@schemas';
 import { User, UserRepository } from '@models/user';
 import { JwtConfigService } from '@configs/jwt';
 
@@ -20,7 +20,11 @@ export class AuthService {
    * @returns - JWT Token.
    */
   private async getJwtToken(user: User): Promise<JwtToken> {
-    const payload = { sub: user.id, username: user.username };
+    const payload: JwtCustomPayload = {
+      sub: user.id,
+      username: user.username,
+      role: user.role,
+    };
     const access_token = await this.jwtService.signAsync(payload);
     const expires_in = this.jwtConfig.expiresIn;
     const token_type = JWT_TOKEN_TYPE;

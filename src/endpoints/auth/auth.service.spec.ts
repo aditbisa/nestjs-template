@@ -17,6 +17,7 @@ describe('AuthService', () => {
   const userMock = {
     id: 1,
     username: 'a-user',
+    role: 'courier',
   } as User;
   const userRepositoryMock = {
     verify: jest.fn(),

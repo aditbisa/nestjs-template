@@ -11,6 +11,7 @@ describe('getJWTParsedPayloadFactory', () => {
           [JWT_PAYLOAD_REQUEST_KEY]: {
             sub: 1,
             username: 'a-user',
+            role: 'courier',
           },
         }),
       }),
@@ -20,6 +21,7 @@ describe('getJWTParsedPayloadFactory', () => {
     expect(result).toEqual({
       userId: 1,
       username: 'a-user',
+      role: 'courier',
     });
   });
 

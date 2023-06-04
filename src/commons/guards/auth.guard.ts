@@ -8,13 +8,19 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 
-import { JWT_PAYLOAD_REQUEST_KEY, JWT_TOKEN_TYPE } from '@schemas';
-import { IS_PUBLIC_KEY } from '@commons/decorators';
+import {
+  JWT_PAYLOAD_REQUEST_KEY,
+  JWT_TOKEN_TYPE,
+  JwtCustomPayload,
+  UserRole,
+} from '@schemas';
+import { AUTH_ROLE, IS_PUBLIC_KEY } from '@commons/decorators';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   /**
    * This AuthGuard became global once set into AuthModule.
+   * Use Public and AuthRole decorator to do some filtering.
    */
   constructor(private jwtService: JwtService, private reflector: Reflector) {}
 
@@ -37,12 +43,22 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException();
     }
 
+    let payload: JwtCustomPayload;
     try {
-      const payload = await this.jwtService.verifyAsync(token);
+      payload = await this.jwtService.verifyAsync(token);
       request[JWT_PAYLOAD_REQUEST_KEY] = payload;
     } catch {
       throw new UnauthorizedException();
     }
+
+    const authRoles = this.reflector.getAllAndOverride<UserRole[]>(AUTH_ROLE, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+    if (authRoles && !authRoles.includes(payload.role)) {
+      return false;
+    }
+
     return true;
   }
 
