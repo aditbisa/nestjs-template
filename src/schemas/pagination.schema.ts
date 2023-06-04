@@ -9,3 +9,11 @@ export interface PaginatedData<T> {
   totalPage: number;
   totalCount: number;
 }
+
+/**
+ * Paginated data request schema.
+ */
+export interface PaginatedParam {
+  page: number;
+  countPerPage: number;
+}

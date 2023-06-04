@@ -173,7 +173,10 @@ describe('BaseRepository', () => {
       await manager.save(TestEntity, { data: `d${i}`, secret: 's${i}' });
     }
 
-    const ls1 = await testRepository.findPaginated(1, 2, { secret: Not('') });
+    const ls1 = await testRepository.findPaginated(
+      { page: 1, countPerPage: 2 },
+      { secret: Not('') },
+    );
     expect(ls1.data.length).toBe(2);
     expect(ls1.data[0].data).toBe('d10');
     expect(ls1.data[1].data).toBe('d9');
@@ -183,7 +186,10 @@ describe('BaseRepository', () => {
     expect(ls1.totalPage).toBe(5);
     expect(ls1.totalCount).toBe(10);
 
-    const ls2 = await testRepository.findPaginated(3, 4, { secret: Not('') });
+    const ls2 = await testRepository.findPaginated(
+      { page: 3, countPerPage: 4 },
+      { secret: Not('') },
+    );
     expect(ls2.data.length).toBe(2);
     expect(ls2.data[0].data).toBe('d2');
     expect(ls2.data[1].data).toBe('d1');

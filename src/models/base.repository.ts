@@ -11,7 +11,7 @@ import {
 } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
-import { PaginatedData } from '@schemas';
+import { PaginatedData, PaginatedParam } from '@schemas';
 import { BaseEntity } from './base.entity';
 
 /**
@@ -105,8 +105,7 @@ export abstract class BaseRepository<TEntity extends BaseEntity> {
    * @returns - Paginated data founds.
    */
   async findPaginated(
-    page: number,
-    countPerPage: number,
+    param: PaginatedParam,
     criteria: FindOptionsWhere<TEntity> = {},
     options: FindManyOptions<TEntity> = {},
   ): Promise<PaginatedData<TEntity>> {
@@ -115,20 +114,20 @@ export abstract class BaseRepository<TEntity extends BaseEntity> {
       options.order = { id: 'DESC' };
     }
     options.where = criteria;
-    options.skip = countPerPage * (page - 1);
-    options.take = countPerPage;
+    options.skip = param.countPerPage * (param.page - 1);
+    options.take = param.countPerPage;
 
     return this.repository
       .findAndCount(options)
       .then((result: [TEntity[], number]) => {
         const data = result[0];
         const totalCount = result[1];
-        const totalPage = Math.ceil(totalCount / countPerPage) || 1;
+        const totalPage = Math.ceil(totalCount / param.countPerPage) || 1;
         return {
           data,
-          page,
+          page: param.page,
           count: data.length,
-          countPerPage,
+          countPerPage: param.countPerPage,
           totalPage,
           totalCount,
         };
