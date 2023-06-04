@@ -9,7 +9,12 @@ async function bootstrap() {
   const appConfig = app.get(AppConfigService);
 
   // Auto validation for all endpoints.
-  app.useGlobalPipes(new ValidationPipe({ transform: true }));
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      whitelist: true,
+    }),
+  );
 
   await app.listen(appConfig.port);
 }
