@@ -8,6 +8,7 @@ import { MariadbConfigModule, MariadbConfigService } from '@configs/mariadb';
 import { ENTITIES } from '@models/entities';
 import { HealthModule } from '@endpoints/health';
 import { AuthModule } from '@endpoints/auth';
+import { UsersModule } from '@endpoints/users';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { AuthModule } from '@endpoints/auth';
     AppConfigModule,
     HealthModule,
     AuthModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

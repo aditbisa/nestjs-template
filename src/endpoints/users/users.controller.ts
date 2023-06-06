@@ -7,11 +7,11 @@ import { UsersService } from './users.service';
 import { UserListDto } from './user.dto';
 
 @Controller('users')
+@AuthRole(['sys-admin', 'admin'])
 export class UsersController {
   constructor(private userService: UsersService) {}
 
   @Get()
-  @AuthRole(['sys-admin', 'admin'])
   list(
     @Query() filter: UserListDto,
     @JwtParsePayload() tokenPayload: JwtParsedPayload,

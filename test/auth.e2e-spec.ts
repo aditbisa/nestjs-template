@@ -1,6 +1,6 @@
 import * as request from 'supertest';
 import { Test } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
 
 import { AppModule } from '@src/app.module';
 import { User, UserRepositoryModule, UserRepository } from '@models/user';
@@ -20,6 +20,12 @@ describe('AuthController (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
+    app.useGlobalPipes(
+      new ValidationPipe({
+        transform: true,
+        whitelist: true,
+      }),
+    );
     await app.init();
 
     const userRepo = moduleFixture.get(UserRepository);
