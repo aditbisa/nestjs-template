@@ -5,9 +5,10 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { AppModule } from '@src/app.module';
 import { User, UserRepositoryModule, UserRepository } from '@models/user';
 
-const userMock = {
-  username: 'username',
-  password: 'password',
+const courierUserMock = {
+  id: 3,
+  username: 'courier',
+  password: 'courier',
   role: 'courier',
 } as User;
 
@@ -29,7 +30,9 @@ describe('AuthController (e2e)', () => {
     await app.init();
 
     const userRepo = moduleFixture.get(UserRepository);
-    await userRepo.create({ ...userMock });
+    await userRepo.update(courierUserMock.id, {
+      password: courierUserMock.username,
+    });
   });
 
   afterAll(async () => {
@@ -40,8 +43,8 @@ describe('AuthController (e2e)', () => {
     const res: request.Response = await request(app.getHttpServer())
       .post('/auth/login')
       .send({
-        username: userMock.username,
-        password: userMock.password,
+        username: courierUserMock.username,
+        password: courierUserMock.password,
       })
       .expect(200);
     expect(res.body.access_token).toBeTruthy();
@@ -51,8 +54,8 @@ describe('AuthController (e2e)', () => {
     const res1: request.Response = await request(app.getHttpServer())
       .post('/auth/login')
       .send({
-        username: userMock.username,
-        password: userMock.password,
+        username: courierUserMock.username,
+        password: courierUserMock.password,
       });
     const token = res1.body.access_token;
 
@@ -60,6 +63,6 @@ describe('AuthController (e2e)', () => {
       .get('/auth/profile')
       .set('Authorization', `Bearer ${token}`)
       .expect(200);
-    expect(res2.body.username).toBe(userMock.username);
+    expect(res2.body.username).toBe(courierUserMock.username);
   });
 });

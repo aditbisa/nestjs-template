@@ -7,19 +7,19 @@ import { User, UserRepositoryModule, UserRepository } from '@models/user';
 import { AuthModule, AuthService } from '@endpoints/auth';
 
 const sysAdminUserMock = {
-  id: null,
+  id: 1,
   username: 'sys-admin',
   password: 'sys-admin',
   role: 'sys-admin',
 } as User;
 const adminUserMock = {
-  id: null,
+  id: 2,
   username: 'admin',
   password: 'admin',
   role: 'admin',
 } as User;
 const courierUserMock = {
-  id: null,
+  id: 3,
   username: 'courier',
   password: 'courier',
   role: 'courier',
@@ -50,8 +50,7 @@ describe('UsersController (e2e)', () => {
 
     const userRepo = moduleFixture.get(UserRepository);
     for (const userMock of [sysAdminUserMock, adminUserMock, courierUserMock]) {
-      const user = await userRepo.create({ ...userMock });
-      userMock.id = user.id;
+      await userRepo.update(userMock.id, { password: userMock.username });
     }
     authService = moduleFixture.get(AuthService);
   });
@@ -66,8 +65,64 @@ describe('UsersController (e2e)', () => {
       .get('/users')
       .set(...auths)
       .expect(200);
-    expect(res.body.data[0].username).toBe('courier');
-    expect(res.body.data[1].username).toBe('admin');
-    expect(res.body.data[2].username).toBe('sys-admin');
+    expect(res.body.data.pop().username).toBe('sys-admin'); // Last Data
+    expect(res.body.data.pop().username).toBe('admin');
+    expect(res.body.data.pop().username).toBe('courier');
+  });
+
+  it('/users (POST)', async () => {
+    const auths = await getAuthHeader(adminUserMock);
+    const res: request.Response = await request(app.getHttpServer())
+      .post(`/users`)
+      .send({
+        username: 'user',
+        password: 'pass',
+        role: 'courier',
+      })
+      .set(...auths)
+      .expect(201);
+    expect(res.body.username).toBe('user');
+    expect(res.body.password).toBeUndefined();
+    expect(res.body.role).toBe('courier');
+  });
+
+  it('/users (POST) Fail', async () => {
+    const auths = await getAuthHeader(adminUserMock);
+    await request(app.getHttpServer())
+      .post(`/users`)
+      .send({
+        username: 'user',
+        password: 'pass',
+        role: 'admin',
+      })
+      .set(...auths)
+      .expect(401);
+    await request(app.getHttpServer())
+      .post(`/users`)
+      .send({
+        username: 'user',
+        password: 'pass',
+        role: 'other',
+      })
+      .set(...auths)
+      .expect(400);
+  });
+
+  it('/users/:id (GET)', async () => {
+    const auths = await getAuthHeader(sysAdminUserMock);
+    const res: request.Response = await request(app.getHttpServer())
+      .get(`/users/${adminUserMock.id}`)
+      .set(...auths)
+      .expect(200);
+    expect(res.body.username).toBe('admin');
+    expect(res.body.password).toBeUndefined();
+  });
+
+  it('/users/:id (GET) Fail', async () => {
+    const auths = await getAuthHeader(adminUserMock);
+    await request(app.getHttpServer())
+      .get(`/users/${adminUserMock.id}`)
+      .set(...auths)
+      .expect(401);
   });
 });

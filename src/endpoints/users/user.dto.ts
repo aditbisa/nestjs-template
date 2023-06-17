@@ -1,7 +1,15 @@
 import { Type } from 'class-transformer';
-import { IsNumber, IsOptional, Min } from 'class-validator';
+import {
+  IsIn,
+  IsNumber,
+  IsOptional,
+  IsString,
+  Length,
+  Min,
+} from 'class-validator';
 
-import { PaginatedParam } from '@schemas';
+import { PaginatedParam, UserRole } from '@schemas';
+import { User } from '@models/user';
 
 /**
  * List request parameter.
@@ -18,4 +26,22 @@ export class UserListDto implements PaginatedParam {
   @IsNumber()
   @Min(1)
   countPerPage = 50;
+}
+
+/**
+ * Create request parameter.
+ */
+export class UserCreateDto
+  implements Pick<User, 'username' | 'password' | 'role'>
+{
+  @IsString()
+  @Length(4, 25)
+  username: string;
+
+  @IsString()
+  @Length(4, 25)
+  password: string;
+
+  @IsIn(['admin', 'courier', 'helper'])
+  role: UserRole;
 }

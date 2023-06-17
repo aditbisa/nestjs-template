@@ -7,7 +7,7 @@ import { BaseEntity } from '@models/base.entity';
 /**
  * Typeorm entity for User.
  */
-@Entity()
+@Entity({ name: 'users' })
 export class User extends BaseEntity {
   @Column({ unique: true })
   username: string;
